@@ -17,7 +17,7 @@ class CreateSongsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('artist');
-            $table->int('genreId');
+            $table->string('genreId');
         });
     }
 
