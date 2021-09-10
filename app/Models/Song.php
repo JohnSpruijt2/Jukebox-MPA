@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Song extends Model
 {
     use HasFactory;
+
+    public function genre() {
+        return $this->belongsTo('app/Genre');
+    }
 }

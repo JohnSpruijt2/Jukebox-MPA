@@ -25,8 +25,8 @@ class SongFactory extends Factory
         return [
             'name' => $this->faker->text(10),
             'artist' => $this->faker->name(),
-            'duration' => 0,
-            'genreID' => 0,
+            'duration' => rand(44, 360),
+            'genre_id' => rand(0, 15),
         ];
     }
 }
