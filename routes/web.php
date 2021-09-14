@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\dashController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,10 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-use App\Http\Controllers\indexController;
-Route::get('/songs', [indexController::class, 'index']);
+ Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

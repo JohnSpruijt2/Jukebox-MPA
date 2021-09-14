@@ -15,6 +15,8 @@ class CreateSavedListsSongsTable extends Migration
     {
         Schema::create('saved_lists_songs', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('songId');
+            $table->bigInteger('listId');
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('login') }}">
+        <form style="width: 20rem;" method="POST" action="{{ route('login') }}">
             @csrf
 
             <!-- Email Address -->
@@ -41,7 +41,9 @@
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
-
+                <br>
+                <a href="/register">no account? register here</a>
+                <br>
                 <x-button class="btn btn-dark ml-3">
                     {{ __('Log in') }}
                 </x-button>
