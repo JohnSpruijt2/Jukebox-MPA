@@ -20,5 +20,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+use App\Http\Controllers\indexController;
+Route::get('/songs', [indexController::class, 'index']);
 
 require __DIR__.'/auth.php';
