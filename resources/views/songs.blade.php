@@ -34,7 +34,7 @@
      <div class="songDiv">
         <a class="songName">{{$song->name}}</a>
         <a class="songArtist">{{$song->artist}}</a>
-        <a class="songDuration">{{$song->duration}} sec</a>
+        <a class="songDuration">{{$song->duration}}</a>
     </div>
     @endforeach
     </main>

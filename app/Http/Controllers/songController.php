@@ -12,8 +12,13 @@ class songController extends Controller
         $songs = DB::select('select * from songs');
         foreach ($songs as $song) {
             $duration = $song->duration;
-            $duration = $duration/60;
-            floor($duration);
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $song->duration = $minutes.':'.$seconds;
         }
         return view('songs', ['songs' => $songs]);
     }
