@@ -22,7 +22,7 @@
             {{ __('Log Out') }}
         </x-dropdown-link>
     </form>
-
+    <a href="/dashboard">dashboard</a> <br>
     <form method="POST" action="{{ url('createList') }}">
         @csrf
         <input type="text" name='listName'>

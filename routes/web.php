@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashController;
 use App\Http\Controllers\listController;
+use App\Http\Controllers\songController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,5 +26,7 @@ Route::get('/createList', function () {return view('createList');})->middleware(
 Route::post('/createList', [listController::class, 'create'])->middleware(['auth']);
 
 Route::get('/showList', [listController::class, 'show'])->middleware(['auth']);
+
+Route::get('/songs', [songController::class, 'index'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

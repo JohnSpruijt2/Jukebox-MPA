@@ -28,10 +28,14 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
-
+                        <a href="/dashboard">dashboard</a> <br>
 
      @foreach ($songs as $song)
-        <h1>{{$song->name}}</h1>
+     <div class="songDiv">
+        <a class="songName">{{$song->name}}</a>
+        <a class="songArtist">{{$song->artist}}</a>
+        <a class="songDuration">{{$song->duration}} sec</a>
+    </div>
     @endforeach
     </main>
 </body>

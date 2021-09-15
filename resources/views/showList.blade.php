@@ -22,7 +22,8 @@
             {{ __('Log Out') }}
         </x-dropdown-link>
     </form>
-
+    <a href="/dashboard">dashboard</a> <br>
     
+    <a href="/songs">add new song</a>
 </body>
 </html>
