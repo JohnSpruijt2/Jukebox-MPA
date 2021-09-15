@@ -18,10 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
- Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth']);
+Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth']);
 
- Route::get('/createList', function () {return view('createList');})->middleware(['auth']);
+Route::get('/createList', function () {return view('createList');})->middleware(['auth']);
 
- Route::post('/createList', [listController::class, 'create'])->middleware(['auth']);
+Route::post('/createList', [listController::class, 'create'])->middleware(['auth']);
+
+Route::get('/showList', [listController::class, 'show'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

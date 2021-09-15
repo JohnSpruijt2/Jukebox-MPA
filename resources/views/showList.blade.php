@@ -23,12 +23,6 @@
         </x-dropdown-link>
     </form>
 
-    {{ Auth::user()->name }}
-    <br>
-     @foreach ($playlists as $playlists)
-        <a href="showList?id={{$playlists->id}}">{{$playlists->name}}</a> <br>
-    @endforeach
-    <a href="createList">create new list</a>
-    </main>
+    
 </body>
 </html>
