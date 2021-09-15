@@ -9,6 +9,7 @@ class songController extends Controller
 {
     //
     public function index() {
+        $user = Auth::user();
         $songs = DB::select('select * from songs');
         foreach ($songs as $song) {
             $duration = $song->duration;
@@ -20,6 +21,7 @@ class songController extends Controller
             }
             $song->duration = $minutes.':'.$seconds;
         }
-        return view('songs', ['songs' => $songs]);
+        $lists = DB::select('select * from saved_lists where userId='.$user->id);
+        return view('songs', ['songs' => $songs, 'lists' => $lists]);
     }
 }

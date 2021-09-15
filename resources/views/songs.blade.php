@@ -29,14 +29,32 @@
                             </x-dropdown-link>
                         </form>
                         <a href="/dashboard">dashboard</a> <br>
-
+<div>
      @foreach ($songs as $song)
-     <div class="songDiv">
-        <a class="songName">{{$song->name}}</a>
-        <a class="songArtist">{{$song->artist}}</a>
-        <a class="songDuration">{{$song->duration}}</a>
-    </div>
+     
+        <div class="songDiv">
+            <a class="songName">{{$song->name}}</a>
+            <a class="songArtist">{{$song->artist}}</a>
+            
+
+            <div class="dropdown">
+                <span class="dropdownBtn">+</span>
+                <div class="dropdown-content">
+                    @foreach ($lists as $list)
+                        <div class="dropdown-item">
+                            <a href='/dashboard'>
+                            {{$list->name}}
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <a class="songDuration">{{$song->duration}}</a>
+        </div>
+  
     @endforeach
+</div>
     </main>
 </body>
 </html>
