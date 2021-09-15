@@ -18,9 +18,9 @@ class listController extends Controller
     public function show(Request $request) {
         $user = Auth::user();
         $listId = $request->id;
-        $list = DB::select('select * from saved_lists where userId=' . $listId);
-        if ($list->userId != $user->id) {
-
+        $listInfo = DB::select('select * from saved_lists where id=' . $listId);
+        if ($listInfo[0]->userId != $user->id) {
+            return redirect('/dashboard');
         }
         return view('showList');
     }
