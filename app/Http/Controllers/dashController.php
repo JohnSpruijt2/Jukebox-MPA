@@ -10,8 +10,8 @@ class dashController extends Controller
     //
     public function index() {
         $user = Auth::user();
-        $songs = DB::select('select * from saved_lists where userId=' . $user->id);
+        $playlists = DB::select('select * from saved_lists where userId=' . $user->id);
 
-        return view('songs', ['songs' => $songs]);
+        return view('dash', ['playlists' => $playlists]);
     }
 }

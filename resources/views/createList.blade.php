@@ -23,12 +23,12 @@
         </x-dropdown-link>
     </form>
 
-    {{ Auth::user()->name }}
+    <form method="POST" action="{{ url('createList') }}">
+        @csrf
+        <input type="text" name='listName'>
+        <input type="submit" value="submit">
+    </form>
 
-     @foreach ($playlists as $playlists)
-        <h1>{{$playlists->name}}</h1>
-    @endforeach
-    <a href="createList">create new list</a>
     </main>
 </body>
 </html>

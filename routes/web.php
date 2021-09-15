@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashController;
+use App\Http\Controllers\listController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
- Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth'])->name('dashboard');
+ Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth']);
+
+ Route::get('/createList', function () {return view('createList');})->middleware(['auth']);
+
+ Route::post('/createList', [listController::class, 'create'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';
