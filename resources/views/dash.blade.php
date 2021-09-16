@@ -27,8 +27,13 @@
     <br>
     <a href="/songs">songs</a>
     <br>
-     @foreach ($playlists as $playlists)
-        <a href="showList?id={{$playlists->id}}">{{$playlists->name}}</a> <br>
+    @if ($tempPlaylists != null)
+        @foreach ($tempPlaylists[0] as $tempPlaylist)
+            <a href="showTempList"><?php var_dump($tempPlaylist) ?></a> <br>
+        @endforeach
+    @endif
+    @foreach ($playlists as $playlist)
+        <a href="showList?id={{$playlist->id}}">{{$playlist->name}}</a> <br>
     @endforeach
     <a href="createList">create new list</a>
     </main>

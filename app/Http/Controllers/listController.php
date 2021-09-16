@@ -15,9 +15,17 @@ class listController extends Controller
         
         $name = $request->input('listName');
         $user = Auth::user();
-        Session::put('saved_list', [$name, $user->id]);
+        $newData = array('name'=>$name, 'userId'=>$user->id);
+        if (Session::get('saved_list') == null) {
+            $data = [];
+        } else {
+            $data = Session::get('saved_list');
+        }
+        
+        array_push($data, $newData);
+        Session::put('saved_list', [$data]);
 
-        DB::insert('INSERT INTO `saved_lists`(`name`, `userId`) VALUES ("'.$name.'",'.$user->id.')');
+        //DB::insert('INSERT INTO `saved_lists`(`name`, `userId`) VALUES ("'.$name.'",'.$user->id.')');
         return redirect('/dashboard');
     }
 
