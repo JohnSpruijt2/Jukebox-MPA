@@ -25,6 +25,8 @@
 
     {{ Auth::user()->name }}
     <br>
+    <a href="/songs">songs</a>
+    <br>
      @foreach ($playlists as $playlists)
         <a href="showList?id={{$playlists->id}}">{{$playlists->name}}</a> <br>
     @endforeach
