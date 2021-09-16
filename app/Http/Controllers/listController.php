@@ -22,6 +22,32 @@ class listController extends Controller
         if ($listInfo[0]->userId != $user->id) {
             return redirect('/dashboard');
         }
-        return view('showList');
+        $songs = DB::select('SELECT * FROM songs INNER JOIN saved_lists_songs ON songs.id=saved_lists_songs.SongId where listId='.$listId);
+
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $song->duration = $minutes.':'.$seconds;
+        }
+
+        return view('showList', ['list' => $listInfo, 'songs' => $songs]);
+    }
+
+    public function addSongToList(Request $request) {
+        $user = Auth::user();
+        $listId = $request->lid;
+        $songId = $request->sid;
+        $list = DB::select('select * from saved_lists where id=' . $listId);
+        if ($list[0]->userId != $user->id) {
+            return redirect('/dashboard');
+        }
+        DB::insert('INSERT INTO `saved_lists_songs`(`songId`,`listId`) VALUES ('.$songId.','.$listId.')');
+        return redirect('/showList?id='.$listId);
+
     }
 }

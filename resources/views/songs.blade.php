@@ -42,7 +42,7 @@
                 <div class="dropdown-content">
                     @foreach ($lists as $list)
                         <div class="dropdown-item">
-                            <a href='/dashboard'>
+                            <a href='/addList?sid={{$song->id}}&lid={{$list->id}}'>
                             {{$list->name}}
                             </a>
                         </div>

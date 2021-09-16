@@ -29,4 +29,6 @@ Route::get('/showList', [listController::class, 'show'])->middleware(['auth']);
 
 Route::get('/songs', [songController::class, 'index'])->middleware(['auth']);
 
+Route::get('/addList', [listController::class, 'addSongToList'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';

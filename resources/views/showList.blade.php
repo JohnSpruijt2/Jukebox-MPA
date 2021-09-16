@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
     <link href="{{ asset('css/default.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/songs.css') }}" rel="stylesheet">
 </head>
 <body>
     <main>
@@ -24,6 +25,15 @@
     </form>
     <a href="/dashboard">dashboard</a> <br>
 
+    @foreach ($songs as $song)
+     
+     <div class="songDiv">
+         <a class="songName">{{$song->name}}</a>
+         <a class="songArtist">{{$song->artist}}</a>
+         <a class="songDuration">{{$song->duration}}</a>
+     </div>
+
+ @endforeach
     <a href="/songs">add new song</a>
 </body>
 </html>

@@ -11,7 +11,7 @@ class songController extends Controller
     public function index() {
         $user = Auth::user();
         $songs = DB::select('select * from songs');
-        foreach ($songs as $song) {
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
             $duration = $song->duration;
             $minutes = floor($duration/60);
             $second = $minutes*60;
