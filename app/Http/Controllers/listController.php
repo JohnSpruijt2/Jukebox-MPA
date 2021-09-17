@@ -15,7 +15,14 @@ class listController extends Controller
         
         $name = $request->input('listName');
         $user = Auth::user();
-        $newData = array('name'=>$name, 'userId'=>$user->id);
+        if (Session::get('saved_list') != null) {
+            $id = count(Session::get('saved_list'));
+            $id++;
+        } else {
+            $id = 1;
+        }
+        
+        $newData = array('name'=>$name, 'userId'=>$user->id, 'id'=>$id);
         if (Session::get('saved_list') == null) {
             $data = [];
             $middleData = [];
@@ -65,6 +72,64 @@ class listController extends Controller
         }
         DB::insert('INSERT INTO `saved_lists_songs`(`songId`,`listId`) VALUES ('.$songId.','.$listId.')');
         return redirect('/showList?id='.$listId);
+    }
 
+    public function addSongToPlayList(Request $request) {
+        $user = Auth::user();
+        $listId = $request->lid;
+        $songId = $request->sid;
+        $list = Session::get('saved_list')[0][$listId-1];
+        if ($list['userId'] != $user->id) {
+            return redirect('/dashboard');
+        }
+        if (Session::get('saved_song') == null) {
+            $data = [];
+            $middleData = [];
+        } else {
+            $data = Session::get('saved_song');
+            $middleData = $data[0];
+        }
+        $newData = array('sid'=>$songId, 'lid'=>$listId);
+        array_push($middleData, $newData);
+        $data = $middleData;
+        
+        Session::put('saved_song', [$data]);
+        return redirect('/showPlayList?id='.$listId);
+    }
+
+
+
+
+    public function showPlay(Request $request) {
+        $user = Auth::user();
+        $list = Session::get('saved_list')[0];
+        $id = $request->id;
+        $listInfo = $list[$id-1];
+        if ($user->id != $listInfo['userId']) {
+            return redirect('/dashboard');
+        }
+        if (Session::get('saved_song') != null) {
+            $songsIds = Session::get('saved_song')[0];
+            $songs = [];
+            foreach ($songsIds as $songid) {
+                $song = DB::select('SELECT * FROM songs where id='.$listInfo['id']);
+                array_push($songs, $song[0]);
+            }
+            
+        }
+        
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $song->duration = $minutes.':'.$seconds;
+        }
+
+        
+        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs]);
     }
 }

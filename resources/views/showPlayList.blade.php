@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yotify - Dashboard</title>
+    <title>Yotify - List</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
     <link href="{{ asset('css/default.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/songs.css') }}" rel="stylesheet">
 </head>
 <body>
     <main>
@@ -22,20 +23,18 @@
             {{ __('Log Out') }}
         </x-dropdown-link>
     </form>
+    <a href="/dashboard">dashboard</a> <br>
 
-    {{ Auth::user()->name }}
-    <br>
-    <a href="/songs">songs</a>
-    <br>
-    @if ($tempPlaylists != null)
-        @foreach ($tempPlaylists[0] as $tempPlaylist)
-            <a href="showPlayList?id={{$tempPlaylist['id']}}">{{$tempPlaylist['name']}}</a> <br>
-        @endforeach
-    @endif
-    @foreach ($playlists as $playlist)
-        <a href="showList?id={{$playlist->id}}">{{$playlist->name}}</a> <br>
+    @foreach ($songs as $song)
+     
+        <div class="songDiv">
+            <a class="songName">{{$song->name}}</a>
+            <a class="songArtist">{{$song->artist}}</a>
+            <a class="songDuration">{{$song->duration}}</a>
+        </div>
+
     @endforeach
-    <a href="createList">create new list</a>
-    </main>
+    
+    <a href="/songs">add new song</a>
 </body>
 </html>

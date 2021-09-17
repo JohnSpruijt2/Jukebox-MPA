@@ -40,13 +40,31 @@
             <div class="dropdown">
                 <span class="dropdownBtn">+</span>
                 <div class="dropdown-content">
-                    @foreach ($lists as $list)
-                        <div class="dropdown-item">
-                            <a href='/addList?sid={{$song->id}}&lid={{$list->id}}'>
-                            {{$list->name}}
+                    @if ($playLists != null)
+                        @foreach ($playLists as $playList)
+                            <div class="dropdown-item">
+                                <a href='/addPlayList?sid={{$song->id}}&lid={{$playList["id"]}}'>
+                                {{$playList['name']}}
+                                </a>
+                            </div>
+                        @endforeach
+                    @endif
+                    @if ($lists != null)
+                        @foreach ($lists as $list)
+                            <div class="dropdown-item">
+                                <a href='/addList?sid={{$song->id}}&lid={{$list->id}}'>
+                                {{$list->name}}
+                                </a>
+                            </div>
+                        @endforeach
+                    @endif
+                    @if ($playLists == null && $lists == null) 
+                    <div class="dropdown-item">
+                            <a href='/createList'>
+                                create new
                             </a>
                         </div>
-                    @endforeach
+                    @endif
                 </div>
             </div>
 

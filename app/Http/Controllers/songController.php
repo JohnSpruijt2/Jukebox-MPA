@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
+use Cookie;
+use Tracker;
+use Session;
 class songController extends Controller
 {
     //
@@ -22,6 +25,6 @@ class songController extends Controller
             $song->duration = $minutes.':'.$seconds;
         }
         $lists = DB::select('select * from saved_lists where userId='.$user->id);
-        return view('songs', ['songs' => $songs, 'lists' => $lists]);
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0]]);
     }
 }
