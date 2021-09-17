@@ -35,4 +35,6 @@ Route::get('/addPlayList', [listController::class, 'addSongToPlayList'])->middle
 
 Route::get('/showPlayList', [listController::class, 'showPlay'])->middleware(['auth']);
 
+Route::get('/saveList', [listController::class, 'saveList'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';

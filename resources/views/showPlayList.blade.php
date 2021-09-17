@@ -24,16 +24,18 @@
         </x-dropdown-link>
     </form>
     <a href="/dashboard">dashboard</a> <br>
+    <h1>{{$list['name']}}</h1>
+    <a href="/saveList?id={{$list['id']}}">save list</a> <br>
+    @if ($songs != null)
+        @foreach ($songs as $song)
+            <div class="songDiv">
+                <a class="songName">{{$song->name}}</a>
+                <a class="songArtist">{{$song->artist}}</a>
+                <a class="songDuration">{{$song->duration}}</a>
+            </div>
 
-    @foreach ($songs as $song)
-     
-        <div class="songDiv">
-            <a class="songName">{{$song->name}}</a>
-            <a class="songArtist">{{$song->artist}}</a>
-            <a class="songDuration">{{$song->duration}}</a>
-        </div>
-
-    @endforeach
+        @endforeach
+    @endif
     
     <a href="/songs">add new song</a>
 </body>
