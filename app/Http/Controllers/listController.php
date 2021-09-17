@@ -18,11 +18,14 @@ class listController extends Controller
         $newData = array('name'=>$name, 'userId'=>$user->id);
         if (Session::get('saved_list') == null) {
             $data = [];
+            $middleData = [];
         } else {
             $data = Session::get('saved_list');
+            $middleData = $data[0];
         }
         
-        array_push($data, $newData);
+        array_push($middleData, $newData);
+        $data = $middleData;
         Session::put('saved_list', [$data]);
 
         //DB::insert('INSERT INTO `saved_lists`(`name`, `userId`) VALUES ("'.$name.'",'.$user->id.')');

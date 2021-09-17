@@ -29,7 +29,7 @@
     <br>
     @if ($tempPlaylists != null)
         @foreach ($tempPlaylists[0] as $tempPlaylist)
-            <a href="showTempList"><?php var_dump($tempPlaylist) ?></a> <br>
+            <a href="showTempList">{{$tempPlaylist['name']}}</a> <br>
         @endforeach
     @endif
     @foreach ($playlists as $playlist)
