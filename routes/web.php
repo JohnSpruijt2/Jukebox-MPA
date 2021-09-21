@@ -37,4 +37,6 @@ Route::get('/showPlayList', [listController::class, 'showPlay'])->middleware(['a
 
 Route::get('/saveList', [listController::class, 'saveList'])->middleware(['auth']);
 
+Route::get('genre', [songController::class , 'genreSort'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';

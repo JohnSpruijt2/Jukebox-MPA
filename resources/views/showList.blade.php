@@ -29,6 +29,13 @@
      
      <div class="songDiv">
          <a class="songName">{{$song->name}}</a>
+            @foreach ($genres as $genre)
+                @if ($genre->id == $song->genre_id)
+                    <a href="/genre?id={{$genre->id}}" class="songGenre">
+                        {{$genre->name}}
+                    </a>
+                @endif
+            @endforeach
          <a class="songArtist">{{$song->artist}}</a>
          <a class="songDuration">{{$song->duration}}</a>
      </div>

@@ -25,6 +25,26 @@ class songController extends Controller
             $song->duration = $minutes.':'.$seconds;
         }
         $lists = DB::select('select * from saved_lists where userId='.$user->id);
-        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0]]);
+        $genres = DB::select('select * from `genres`');
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0], 'genres' => $genres]);
+    }
+
+    public function genreSort(Request $request) {
+        $user = Auth::user();
+        $id = $request->id;
+        $songs = DB::select('select * from songs where genre_id='.$id);
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $song->duration = $minutes.':'.$seconds;
+        }
+        $lists = DB::select('select * from saved_lists where userId='.$user->id);
+        $genres = DB::select('select * from `genres`');
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0], 'genres' => $genres]);
     }
 }

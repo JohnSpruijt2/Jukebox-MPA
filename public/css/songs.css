@@ -11,6 +11,15 @@
     font-size: 1.25rem;
     margin-left: 1rem;
 }
+.songGenre {
+    color: rgb(102, 102, 102);
+    font-size: 1.2rem;
+    margin-left: 1rem;
+    text-decoration: none;
+}
+.songGenre:hover {
+    text-decoration: underline;
+}
 .songDuration {
     float: right;
 }
