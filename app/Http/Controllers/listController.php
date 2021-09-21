@@ -16,7 +16,7 @@ class listController extends Controller
         $name = $request->input('listName');
         $user = Auth::user();
         if (Session::get('saved_list') != null) {
-            $id = count(Session::get('saved_list'));
+            $id = count(Session::get('saved_list')[0]);
             $id++;
         } else {
             $id = 1;
@@ -58,8 +58,7 @@ class listController extends Controller
             }
             $song->duration = $minutes.':'.$seconds;
         }
-
-        return view('showList', ['list' => $listInfo, 'songs' => $songs]);
+        return view('showList', ['list' => $listInfo[0], 'songs' => $songs]);
     }
 
     public function addSongToList(Request $request) {
@@ -114,10 +113,12 @@ class listController extends Controller
             
             $songs = [];
             foreach ($songsIds as $songId) {
+                if ($songId['lid'] == $id) {
+                    $song = DB::select('SELECT * FROM songs where id='.$songId['sid']);
                 
-                $song = DB::select('SELECT * FROM songs where id='.$songId['sid']);
+                    array_push($songs, $song[0]);
+                }
                 
-                array_push($songs, $song[0]);
                 
             }
             foreach ($songs as $song) {             //convert seconds into minutes and seconds
@@ -132,8 +133,6 @@ class listController extends Controller
             }
         }
         
-        
-
         return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs]);
         
     }
@@ -151,8 +150,14 @@ class listController extends Controller
 
         $newListId = DB::select('SELECT * FROM `saved_lists` ORDER BY id DESC LIMIT 0, 1')[0]->id;
         
-        foreach ($savedSongs as $savedSong) {
-            DB::insert('INSERT INTO `saved_lists_songs`(`songId`, `listId`) VALUES ("'.$savedSongs['sid'].'",'.$newListId.')');
+        if ($savedSongs != null) {
+            foreach ($savedSongs as $savedSong) {
+                DB::insert('INSERT INTO `saved_lists_songs`(`songId`, `listId`) VALUES ("'.$savedSong['sid'].'",'.$newListId.')');
+            }
         }
+        $sessionTemp = Session::get('saved_list');
+        $sessionTemp[0][$id-1] = null;
+        Session::put('saved_list', $sessionTemp);
+        return redirect('/dashboard');
     }
 }

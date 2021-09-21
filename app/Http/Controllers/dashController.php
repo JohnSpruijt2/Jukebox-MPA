@@ -14,9 +14,7 @@ class dashController extends Controller
     public function index() {
         $user = Auth::user();
         $playlists = DB::select('select * from saved_lists where userId=' . $user->id);
-        //var_dump(Session::get('saved_list')[0]);
-        //var_dump($playlists);
-        $tempPlay = Session::get('saved_list');
+        $tempPlay = Session::get('saved_list')[0];
         return view('dash', ['playlists' => $playlists, 'tempPlaylists' => $tempPlay]);
     }
 }

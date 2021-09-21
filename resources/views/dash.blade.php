@@ -27,9 +27,13 @@
     <br>
     <a href="/songs">songs</a>
     <br>
+
     @if ($tempPlaylists != null)
-        @foreach ($tempPlaylists[0] as $tempPlaylist)
-            <a href="showPlayList?id={{$tempPlaylist['id']}}">{{$tempPlaylist['name']}}</a> <br>
+        @foreach ($tempPlaylists as $tempPlaylist)
+            @if ($tempPlaylist != null) 
+                <a href="showPlayList?id={{$tempPlaylist['id']}}">{{$tempPlaylist['name']}}</a> <br>
+            @endif
+            
         @endforeach
     @endif
     @foreach ($playlists as $playlist)

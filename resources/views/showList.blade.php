@@ -24,7 +24,7 @@
         </x-dropdown-link>
     </form>
     <a href="/dashboard">dashboard</a> <br>
-
+    <h1>{{$list->name}}</h1>
     @foreach ($songs as $song)
      
      <div class="songDiv">
