@@ -153,13 +153,16 @@ class listController extends Controller
         
         if ($savedSongs != null) {
             foreach ($savedSongs as $savedSong) {
-                DB::insert('INSERT INTO `saved_lists_songs`(`songId`, `listId`) VALUES ("'.$savedSong['sid'].'",'.$newListId.')');
+                if ($savedSong['lid'] == $id) {
+                    DB::insert('INSERT INTO `saved_lists_songs`(`songId`, `listId`) VALUES ("'.$savedSong['sid'].'",'.$newListId.')');
+                }
+                
             }
         }
         $sessionTemp = Session::get('saved_list');
         $sessionTemp[0][$id-1] = null;
         Session::put('saved_list', $sessionTemp);
-        return redirect('/dashboard');
+        return redirect('/showList?id='.$newListId);
     }
 
     public function removePlaySong(Request $request) {
@@ -178,5 +181,11 @@ class listController extends Controller
         return redirect('/showPlayList?id='.$lid);
     }
 
+    public function removeSong(Request $request) {
+        $sid = $request->sid;
+        $lid = $request->lid;
+        DB::delete('delete from saved_lists_songs where songId='.$sid.' AND listId='.$lid);
+        return redirect('/showList?id='.$lid);
+    }
     
 }
