@@ -161,4 +161,22 @@ class listController extends Controller
         Session::put('saved_list', $sessionTemp);
         return redirect('/dashboard');
     }
+
+    public function removePlaySong(Request $request) {
+        $sid = $request->sid;
+        $lid = $request->lid;
+        $savedSongs = Session::get('saved_song');
+        $i = 0;
+        foreach ($savedSongs[0] as $savedSong) {
+            if ($savedSong['sid'] == $sid && $savedSong['lid'] == $lid) {
+                unset($savedSongs[0][$i]);
+            }
+            $i++;
+        }
+        $newSavedSongs = [array_values($savedSongs[0])];
+        Session::put('saved_song', $newSavedSongs);
+        return redirect('/showPlayList?id='.$lid);
+    }
+
+    
 }

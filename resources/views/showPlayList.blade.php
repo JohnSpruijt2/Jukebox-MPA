@@ -38,6 +38,7 @@
                     @endif
                 @endforeach
                 <a class="songArtist">{{$song->artist}}</a>
+                <a href="/removePlaySong?sid={{$song->id}}&lid={{$list['id']}}" class="removeBtn">-</a>
                 <a class="songDuration">{{$song->duration}}</a>
             </div>
 

@@ -41,4 +41,6 @@ Route::get('/genre', [songController::class , 'genreSort'])->middleware(['auth']
 
 Route::get('/genres', [songController::class, 'genresShow'])->middleware(['auth']);
 
+Route::get('/removePlaySong', [listController::class , 'removePlaySong'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';
