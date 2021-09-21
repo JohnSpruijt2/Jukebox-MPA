@@ -28,6 +28,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+                        <a href="/songs">songs</a> <br>
                         <a href="/dashboard">dashboard</a> <br>
 <div>
      @foreach ($songs as $song)

@@ -47,4 +47,9 @@ class songController extends Controller
         $genres = DB::select('select * from `genres`');
         return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0], 'genres' => $genres]);
     }
+
+    public function genresShow() {
+        $genres = DB::select('select * from `genres`');
+        return view('genres' , ['genres' => $genres]);
+    }
 }

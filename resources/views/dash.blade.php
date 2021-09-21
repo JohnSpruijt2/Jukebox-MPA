@@ -25,7 +25,9 @@
 
     {{ Auth::user()->name }}
     <br>
-    <a href="/songs">songs</a>
+    <a href="/songs">songs</a> 
+    <br>
+    <a href="/genres">genres</a>
     <br>
 
     @if ($tempPlaylists != null)
