@@ -58,7 +58,8 @@ class listController extends Controller
             }
             $song->duration = $minutes.':'.$seconds;
         }
-        return view('showList', ['list' => $listInfo[0], 'songs' => $songs]);
+        $genres = DB::select('select * from `genres`');
+        return view('showList', ['list' => $listInfo[0], 'songs' => $songs, 'genres' => $genres]);
     }
 
     public function addSongToList(Request $request) {
@@ -132,8 +133,8 @@ class listController extends Controller
                 $song->duration = $minutes.':'.$seconds;
             }
         }
-        
-        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs]);
+        $genres = DB::select('select * from `genres`');
+        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs, 'genres' => $genres]);
         
     }
 
