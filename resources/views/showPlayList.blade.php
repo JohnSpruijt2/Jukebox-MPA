@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yotify - List</title>
+    <title>Yotify - {{$list['name']}}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,9 +25,10 @@
     </form>
     <a href="/dashboard">dashboard</a> <br>
     <a class="listName" href="/editPlayList?id={{$list['id']}}">{{$list['name']}}</a>
-    <h2>total: {{$totalDuration}}</h2>
     <a href="/saveList?id={{$list['id']}}">save list</a> <br>
     <a href="/removePlayList?id={{$list['id']}}">delete list</a>
+    <h2>total: {{$totalDuration}}</h2>
+    
     @if ($songs != null)
         @foreach ($songs as $song)
             <div class="songDiv">
