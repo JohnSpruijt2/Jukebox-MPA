@@ -14,43 +14,40 @@
 </head>
 <body>
     <main>
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
 
-        <x-dropdown-link :href="route('logout')"
-            onclick="event.preventDefault();
-            this.closest('form').submit();">
-            {{ __('Log Out') }}
-        </x-dropdown-link>
-    </form>
+            <x-dropdown-link :href="route('logout')"
+                onclick="event.preventDefault();
+                this.closest('form').submit();">
+                {{ __('Log Out') }}
+            </x-dropdown-link>
+        </form>
 
-    {{ Auth::user()->name }}
-    <br>
-    <a href="/songs">songs</a> 
-    <br>
-    <a href="/genres">genres</a>
-    <br>
-    
-    @if ($tempPlaylists != null)
-        <h3>playlists</h3>
-        @foreach ($tempPlaylists as $tempPlaylist)
-            @if ($tempPlaylist != null) 
-                <div onclick="location.href = 'showPlayList?id={{$tempPlaylist['id']}}';" class="playlistDiv">
-                    <a>{{$tempPlaylist['name']}}</a>
+        {{ Auth::user()->name }}
+        <br>
+        <a href="/songs">songs</a> 
+        <br>
+        <a href="/genres">genres</a>
+        <br>
+        @if ($tempPlaylists != null)
+                @foreach ($tempPlaylists as $tempPlaylist)
+                    @if ($tempPlaylist != null) 
+                        <div onclick="location.href = 'showPlayList?id={{$tempPlaylist['id']}}';" class="playlistDiv">
+                            <a>{{$tempPlaylist['name']}}</a>
+                        </div>
+                    @endif
+                @endforeach
+        @endif
+        @if ($playlists != null)
+            <h3>saved playlists</h3>
+            @foreach ($playlists as $playlist)
+                <div onclick="location.href = 'showList?id={{$playlist->id}}';" class="playlistDiv">
+                    <a>{{$playlist->name}}</a>
                 </div>
-            @endif
-            
-        @endforeach
-    @endif
-    @if ($playlists != null)
-        <h3>saved playlists</h3>
-        @foreach ($playlists as $playlist)
-            <div onclick="location.href = 'showList?id={{$playlist->id}}';" class="playlistDiv">
-                <a>{{$playlist->name}}</a>
-            </div>
-        @endforeach
-    @endif
-    <a href="createList">create new list</a>
+            @endforeach
+        @endif
+        <a href="createList">create new list</a>
     </main>
 </body>
 </html>

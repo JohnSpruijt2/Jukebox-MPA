@@ -45,4 +45,8 @@ Route::get('/removePlaySong', [listController::class , 'removePlaySong'])->middl
 
 Route::get('/removeSong', [listController::class , 'removeSong'])->middleware(['auth']);
 
+Route::get('/removePlayList', [listController::class, 'removePlayList'])->middleware(['auth']);
+
+Route::get('/removeList', [listController::class, 'removeList'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';

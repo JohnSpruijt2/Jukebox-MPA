@@ -188,4 +188,39 @@ class listController extends Controller
         return redirect('/showList?id='.$lid);
     }
     
+    public function removePlayList(Request $request) {
+        $lid = $request->id;
+        $savedLists = Session::get('saved_list');
+        $i = 0;
+        foreach ($savedLists[0] as $savedList) {
+            if ($savedList['id'] == $lid) {
+                $savedLists[0][$i] = null;
+            }
+            $i++;
+        }
+        Session::put('saved_list', $savedLists);
+
+        $savedSongs = Session::get('saved_song');
+        if ($savedSongs != null) {
+            $i = 0;
+            foreach ($savedSongs[0] as $savedSong) {
+                if ($savedSong['lid'] == $lid) {
+                    unset($savedSongs[0][$i]);
+                }
+            $i++;
+            }
+            $newSavedSongs = [array_values($savedSongs[0])];
+            Session::put('saved_song', $newSavedSongs);
+        }
+        
+
+        return redirect('/dashboard');
+    }
+
+    public function removeList(Request $request) {
+        $lid = $request->id;
+        DB::delete('delete from saved_lists where id='.$lid);
+        DB::delete('delete from saved_lists_songs where listId='.$lid);
+        return redirect('/dashboard');
+    }
 }

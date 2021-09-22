@@ -24,6 +24,7 @@
         </x-dropdown-link>
     </form>
     <a href="/dashboard">dashboard</a> <br>
+    <a href="/removeList?id={{$list->id}}">delete list</a>
     <h1>{{$list->name}}</h1>
     @foreach ($songs as $song)
      
