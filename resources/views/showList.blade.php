@@ -24,9 +24,9 @@
         </x-dropdown-link>
     </form>
     <a href="/dashboard">dashboard</a> <br>
+    <a class="listName" href="/editList?id={{$list->id}}">{{$list->name}}</a> <br>
     <a href="/removeList?id={{$list->id}}">delete list</a>
-    <h1>{{$list->name}}</h1>
-    <h2>{{$totalDuration}}</h2>
+    <h2>total: {{$totalDuration}}</h2>
     @foreach ($songs as $song)
      
      <div class="songDiv">

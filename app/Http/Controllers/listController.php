@@ -153,6 +153,8 @@ class listController extends Controller
             $seconds = '0'.$seconds;
         }
         $totalDuration = $minutes.':'.$seconds;
+        } else {
+            $totalDuration = '0:00';
         }
         $genres = DB::select('select * from `genres`');
         return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs, 'genres' => $genres, 'totalDuration' => $totalDuration]);
@@ -242,6 +244,54 @@ class listController extends Controller
         $lid = $request->id;
         DB::delete('delete from saved_lists where id='.$lid);
         DB::delete('delete from saved_lists_songs where listId='.$lid);
+        return redirect('/dashboard');
+    }
+
+    public function editPlayList(Request $request) {
+        $user = Auth::user();
+        $lid = $request->id;
+        $savedList = Session::get('saved_list')[0][$lid-1];
+        if ($savedList['userId'] != $user->id) {
+                return redirect('/dashboard');
+        }
+        return view('editPList' , ['type' => 'temp','list' => $savedList]);
+    }
+
+    public function confirmEditPlayList(Request $request) {
+        $user = Auth::user();
+        $lid = $request->id;
+        $name = $request->input('name');
+        $savedList = Session::get('saved_list')[0][$lid-1];
+        if ($savedList['userId'] != $user->id) {
+                return redirect('/dashboard');
+        }
+        $lists = Session::get('saved_list');
+        $lists[0][$lid-1]['name'] = $name;
+        Session::put('saved_list', $lists);
+        return redirect('/showPlayList?id='.$lid);
+    }
+
+    public function editList(Request $request) {
+        $user = Auth::user();
+        $lid = $request->id;
+        $savedList = DB::select('select * from saved_lists where id='.$lid)[0];
+        if ($savedList->userId != $user->id) {
+                return redirect('/dashboard');
+        }
+        return view('editList' , ['type' => 'saved','list' => $savedList]);
+    }
+
+    public function confirmEditList(Request $request) {
+        $user = Auth::user();
+        $lid = $request->id;
+        $name = $request->input('name');
+        $savedList = DB::select('select * from saved_lists where id='.$lid)[0];
+        if ($savedList->userId != $user->id || $name == '') {
+                return redirect('/dashboard');
+        }
+        DB::table('saved_lists')
+            ->where('id', $lid)
+            ->update(['name' => $name]);
         return redirect('/dashboard');
     }
 }

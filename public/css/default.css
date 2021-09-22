@@ -16,3 +16,8 @@ main {
     box-sizing: border-box;
     min-height: 30rem;
 }
+.listName {
+    font-size: 3rem;
+    color: black;
+    text-decoration: none;
+}

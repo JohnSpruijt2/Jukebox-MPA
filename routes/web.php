@@ -49,4 +49,10 @@ Route::get('/removePlayList', [listController::class, 'removePlayList'])->middle
 
 Route::get('/removeList', [listController::class, 'removeList'])->middleware(['auth']);
 
+Route::Get('/editPlayList' , [listController::class, 'editPlayList'])->middleware(['auth']);
+Route::post('/editPlayList', [listController::class, 'confirmEditPlayList'])->middleware(['auth']);
+
+Route::Get('/editList' , [listController::class, 'editList'])->middleware(['auth']);
+Route::post('/editList', [listController::class, 'confirmEditList'])->middleware(['auth']);
+
 require __DIR__.'/auth.php';
