@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
     <link href="{{ asset('css/default.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dash.css') }}" rel="stylesheet">
 </head>
 <body>
     <main>
@@ -29,18 +30,26 @@
     <br>
     <a href="/genres">genres</a>
     <br>
-
+    
     @if ($tempPlaylists != null)
+        <h3>playlists</h3>
         @foreach ($tempPlaylists as $tempPlaylist)
             @if ($tempPlaylist != null) 
-                <a href="showPlayList?id={{$tempPlaylist['id']}}">{{$tempPlaylist['name']}}</a> <br>
+                <div onclick="location.href = 'showPlayList?id={{$tempPlaylist['id']}}';" class="playlistDiv">
+                    <a>{{$tempPlaylist['name']}}</a>
+                </div>
             @endif
             
         @endforeach
     @endif
-    @foreach ($playlists as $playlist)
-        <a href="showList?id={{$playlist->id}}">{{$playlist->name}}</a> <br>
-    @endforeach
+    @if ($playlists != null)
+        <h3>saved playlists</h3>
+        @foreach ($playlists as $playlist)
+            <div onclick="location.href = 'showList?id={{$playlist->id}}';" class="playlistDiv">
+                <a>{{$playlist->name}}</a>
+            </div>
+        @endforeach
+    @endif
     <a href="createList">create new list</a>
     </main>
 </body>
