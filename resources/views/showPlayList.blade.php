@@ -25,6 +25,7 @@
     </form>
     <a href="/dashboard">dashboard</a> <br>
     <h1>{{$list['name']}}</h1>
+    <h2>{{$totalDuration}}</h2>
     <a href="/saveList?id={{$list['id']}}">save list</a> <br>
     <a href="/removePlayList?id={{$list['id']}}">delete list</a>
     @if ($songs != null)

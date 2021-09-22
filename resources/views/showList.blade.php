@@ -26,6 +26,7 @@
     <a href="/dashboard">dashboard</a> <br>
     <a href="/removeList?id={{$list->id}}">delete list</a>
     <h1>{{$list->name}}</h1>
+    <h2>{{$totalDuration}}</h2>
     @foreach ($songs as $song)
      
      <div class="songDiv">

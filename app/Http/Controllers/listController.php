@@ -35,7 +35,6 @@ class listController extends Controller
         $data = $middleData;
         Session::put('saved_list', [$data]);
 
-        //DB::insert('INSERT INTO `saved_lists`(`name`, `userId`) VALUES ("'.$name.'",'.$user->id.')');
         return redirect('/dashboard');
     }
 
@@ -47,9 +46,11 @@ class listController extends Controller
             return redirect('/dashboard');
         }
         $songs = DB::select('SELECT * FROM songs INNER JOIN saved_lists_songs ON songs.id=saved_lists_songs.SongId where listId='.$listId);
-
+        $totalDuration = 0;
         foreach ($songs as $song) {             //convert seconds into minutes and seconds
             $duration = $song->duration;
+            $tempTotalDuration = $totalDuration + $duration; //had to make a temporary int to be able to properly sum up the the two ints
+            $totalDuration = $tempTotalDuration;
             $minutes = floor($duration/60);
             $second = $minutes*60;
             $seconds = $duration-$second;
@@ -58,8 +59,18 @@ class listController extends Controller
             }
             $song->duration = $minutes.':'.$seconds;
         }
+        $minutes = floor($totalDuration/60); //convert total duration seconds into minutes and seconds
+        $second = $minutes*60;
+        $seconds = $totalDuration-$second;
+        if ($seconds <10) {
+            $seconds = '0'.$seconds;
+        }
+        $totalDuration = $minutes.':'.$seconds;
+        
+
+
         $genres = DB::select('select * from `genres`');
-        return view('showList', ['list' => $listInfo[0], 'songs' => $songs, 'genres' => $genres]);
+        return view('showList', ['list' => $listInfo[0], 'songs' => $songs, 'genres' => $genres, 'totalDuration' =>$totalDuration]);
     }
 
     public function addSongToList(Request $request) {
@@ -122,19 +133,29 @@ class listController extends Controller
                 
                 
             }
-            foreach ($songs as $song) {             //convert seconds into minutes and seconds
-                $duration = $song->duration;
-                $minutes = floor($duration/60);
-                $second = $minutes*60;
-                $seconds = $duration-$second;
-                if ($seconds <10) {
-                    $seconds = '0'.$seconds;
-                }
-                $song->duration = $minutes.':'.$seconds;
+            $totalDuration = 0;
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $tempTotalDuration = $totalDuration + $duration; //had to make a temporary int to be able to properly sum up the the two ints
+            $totalDuration = $tempTotalDuration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
             }
+            $song->duration = $minutes.':'.$seconds;
+        }
+        $minutes = floor($totalDuration/60); //convert total duration seconds into minutes and seconds
+        $second = $minutes*60;
+        $seconds = $totalDuration-$second;
+        if ($seconds <10) {
+            $seconds = '0'.$seconds;
+        }
+        $totalDuration = $minutes.':'.$seconds;
         }
         $genres = DB::select('select * from `genres`');
-        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs, 'genres' => $genres]);
+        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs, 'genres' => $genres, 'totalDuration' => $totalDuration]);
         
     }
 
