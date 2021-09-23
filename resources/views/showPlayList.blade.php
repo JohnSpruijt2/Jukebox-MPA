@@ -24,7 +24,7 @@
         </x-dropdown-link>
     </form>
     <a href="/dashboard">dashboard</a> <br>
-    <a class="listName" href="/editPlayList?id={{$list['id']}}">{{$list['name']}}</a>
+    <a class="listName" href="/editPlayList?id={{$list['id']}}">{{$list['name']}}</a> <br>
     <a href="/saveList?id={{$list['id']}}">save list</a> <br>
     <a href="/removePlayList?id={{$list['id']}}">delete list</a>
     <h2>total: {{$totalDuration}}</h2>
@@ -32,7 +32,7 @@
     @if ($songs != null)
         @foreach ($songs as $song)
             <div class="songDiv">
-                <a class="songName">{{$song->name}}</a>
+                <a href="/details?id={{$song->id}}" class="songName">{{$song->name}}</a>
                 @foreach ($genres as $genre)
                     @if ($genre->id == $song->genre_id)
                         <a href="/genre?id={{$genre->id}}" class="songGenre">

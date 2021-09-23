@@ -30,7 +30,7 @@
     @foreach ($songs as $song)
      
      <div class="songDiv">
-         <a class="songName">{{$song->name}}</a>
+         <a href="/details?id={{$song->id}}" class="songName">{{$song->name}}</a>
             @foreach ($genres as $genre)
                 @if ($genre->id == $song->genre_id)
                     <a href="/genre?id={{$genre->id}}" class="songGenre">
