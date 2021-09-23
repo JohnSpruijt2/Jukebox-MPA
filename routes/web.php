@@ -52,7 +52,9 @@ Route::get('/removeList', [listController::class, 'removeList'])->middleware(['a
 Route::Get('/editPlayList' , [listController::class, 'editPlayList'])->middleware(['auth']);
 Route::post('/editPlayList', [listController::class, 'confirmEditPlayList'])->middleware(['auth']);
 
-Route::Get('/editList' , [listController::class, 'editList'])->middleware(['auth']);
+Route::get('/editList' , [listController::class, 'editList'])->middleware(['auth']);
 Route::post('/editList', [listController::class, 'confirmEditList'])->middleware(['auth']);
+
+Route::get('/details', [songController::class, 'details'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

@@ -52,4 +52,21 @@ class songController extends Controller
         $genres = DB::select('select * from `genres`');
         return view('genres' , ['genres' => $genres]);
     }
+
+    public function details(Request $request) {
+        $id = $request->id;
+        $details = DB::select('select * from songs where id='.$id);
+        $genres = DB::select('select * from `genres`');
+        foreach ($details as $detail) {             //convert seconds into minutes and seconds
+            $duration = $detail->duration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $detail->duration = $minutes.':'.$seconds;
+        }
+        return view('details' , ['details' => $details[0], 'genres' => $genres]);
+    }
 }
