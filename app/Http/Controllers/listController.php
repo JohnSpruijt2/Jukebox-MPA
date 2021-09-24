@@ -78,8 +78,14 @@ class listController extends Controller
         $listId = $request->lid;
         $songId = $request->sid;
         $list = DB::select('select * from saved_lists where id=' . $listId);
+        $songs = DB::select('select * from saved_lists_songs where listId=' . $listId);
         if ($list[0]->userId != $user->id) {
             return redirect('/dashboard');
+        }
+        foreach($songs as $song) {
+            if ($song->songId == $songId && $song->listId == $listId) {
+                return redirect('/showList?id='.$listId);
+            }
         }
         DB::insert('INSERT INTO `saved_lists_songs`(`songId`,`listId`) VALUES ('.$songId.','.$listId.')');
         return redirect('/showList?id='.$listId);
@@ -97,12 +103,15 @@ class listController extends Controller
             $data = [];
             $middleData = [];
         } else {
-            $data = Session::get('saved_song');
-            $middleData = $data[0];
+            $data = Session::get('saved_song')[0];
+        }
+        foreach ($data as $song) {
+            if ($song['sid'] == $songId && $song['lid'] == $listId) {
+                return redirect('/showPlayList?id='.$listId);
+            }
         }
         $newData = array('sid'=>$songId, 'lid'=>$listId);
-        array_push($middleData, $newData);
-        $data = $middleData;
+        array_push($data, $newData);
         
         Session::put('saved_song', [$data]);
         return redirect('/showPlayList?id='.$listId);
