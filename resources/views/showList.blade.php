@@ -14,6 +14,7 @@
 </head>
 <body>
     <main>
+        <nav>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
 
@@ -22,11 +23,14 @@
             this.closest('form').submit();">
             {{ __('Log Out') }}
         </x-dropdown-link>
+        <a href="/dashboard">dashboard</a> 
+        
+        <a href="/removeList?id={{$list->id}}">delete list</a>
     </form>
-    <a href="/dashboard">dashboard</a> <br>
-    <a class="listName" href="/editList?id={{$list->id}}">{{$list->name}}</a> <br>
-    <a href="/removeList?id={{$list->id}}">delete list</a>
+    </nav>
+    <a class="listName" href="/editList?id={{$list->id}}">{{$list->name}}</a> 
     <h2>total: {{$totalDuration}}</h2>
+
     @foreach ($songs as $song)
      
      <div class="songDiv">

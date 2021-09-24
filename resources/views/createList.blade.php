@@ -13,6 +13,7 @@
 </head>
 <body>
     <main>
+        <nav>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
 
@@ -22,7 +23,9 @@
             {{ __('Log Out') }}
         </x-dropdown-link>
     </form>
-    <a href="/dashboard">dashboard</a> <br>
+    <a href="/dashboard">dashboard</a> 
+</nav>
+<h1>Create new list</h1>
     <form method="POST" action="{{ url('createList') }}">
         @csrf
         <input type="text" name='listName'>

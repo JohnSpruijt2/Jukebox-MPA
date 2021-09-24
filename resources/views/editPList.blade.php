@@ -16,7 +16,7 @@
 <body>
     <main>
    
-
+    <nav>
     {{ Auth::user()->name }}
 
     <form method="POST" action="{{ route('logout') }}">
@@ -27,10 +27,11 @@
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
+                            <a href="/songs">songs</a> 
+                            <a href="/dashboard">dashboard</a> 
                         </form>
-                        <a href="/songs">songs</a> <br>
-                        <a href="/dashboard">dashboard</a> <br>
-
+                        
+</nav>
 
     <h1>edit {{$list['name']}}</h1>
     <form method="POST" action="{{url('editPlayList')}}?id={{$list['id']}}">

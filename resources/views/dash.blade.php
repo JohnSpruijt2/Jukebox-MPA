@@ -14,6 +14,8 @@
 </head>
 <body>
     <main>
+        <nav>
+        {{ Auth::user()->name }}
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
@@ -22,14 +24,15 @@
                 this.closest('form').submit();">
                 {{ __('Log Out') }}
             </x-dropdown-link>
+            <a href="/songs">songs</a> 
+       
+        <a href="/genres">genres</a>
         </form>
 
-        {{ Auth::user()->name }}
-        <br>
-        <a href="/songs">songs</a> 
-        <br>
-        <a href="/genres">genres</a>
-        <br>
+        
+        
+        
+    </nav>
         @if ($tempPlaylists != null)
                 @foreach ($tempPlaylists as $tempPlaylist)
                     @if ($tempPlaylist != null) 

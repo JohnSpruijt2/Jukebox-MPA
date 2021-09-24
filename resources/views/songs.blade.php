@@ -18,7 +18,7 @@
    
 
     {{ Auth::user()->name }}
-
+    <nav>
     <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
@@ -27,9 +27,11 @@
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
+                            <a href="/songs">songs</a> 
+                            <a href="/dashboard">dashboard</a>
                         </form>
-                        <a href="/songs">songs</a> <br>
-                        <a href="/dashboard">dashboard</a> <br>
+                        
+    </nav>
 <div>
      @foreach ($songs as $song)
      
