@@ -28,7 +28,7 @@
 <h1>Create new list</h1>
     <form method="POST" action="{{ url('createList') }}">
         @csrf
-        <input type="text" name='listName'>
+        <input type="text" name='listName' required>
         <input type="submit" value="submit">
     </form>
 

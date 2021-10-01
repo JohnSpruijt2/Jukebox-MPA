@@ -15,6 +15,9 @@ class listController extends Controller
         
         $name = $request->input('listName');
         $user = Auth::user();
+        if ($name == null) {
+            return redirect('/createList');
+        }
         if (Session::get('saved_list') != null) {
             $id = count(Session::get('saved_list')[0]);
             $id++;
