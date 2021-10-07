@@ -32,7 +32,7 @@
     
     </nav>
     <a class="listName" href="/editPlayList">{{$list->name}}</a> 
-    <h2>total: </h2>
+    <h2>total: {{$totalDuration}}</h2>
     @foreach ($songs as $song)
      
      <div class="songDiv">
@@ -45,7 +45,7 @@
                 @endif
             @endforeach
          <a class="songArtist">{{$song->artist}}</a>
-         <a href="/removeSong?sid={{$song->songId}}&lid={{$list->id}}" class="removeBtn">-</a>
+         <a href="/removePlaySong?sid={{$song->id}}" class="removeBtn">-</a>
          <a class="songDuration">{{$song->duration}}</a>
      </div>
 
