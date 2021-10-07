@@ -50,15 +50,11 @@
                 <span class="dropdownBtn">+</span>
                 <div class="dropdown-content">
                     @if ($playLists != null)
-                        @foreach ($playLists as $playList)
-                            @if ($playList != null) 
-                                <div class="dropdown-item">
-                                    <a href='/addPlayList?sid={{$song->id}}&lid={{$playList["id"]}}'>
-                                    {{$playList['name']}}
-                                    </a>
-                                </div>
-                            @endif
-                        @endforeach
+                        <div class="dropdown-item">
+                            <a href='/addPlayList?sid={{$song->id}}'>
+                            {{$playLists->name}}
+                            </a>
+                        </div>
                     @endif
                     @if ($lists != null)
                         @foreach ($lists as $list)

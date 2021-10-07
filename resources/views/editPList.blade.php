@@ -33,10 +33,10 @@
                         
 </nav>
 
-    <h1>edit {{$list['name']}}</h1>
-    <form method="POST" action="{{url('editPlayList')}}?id={{$list['id']}}">
+    <h1>edit {{$list->name}}</h1>
+    <form method="POST" action="{{url('editPlayList')}}">
         {{ csrf_field() }}
-        <input type="text" name="name" id="" value="{{$list['name']}}">
+        <input type="text" name="name" id="" value="{{$list->name}}">
         <input type="submit" value="submit">
     </form>
     </main>

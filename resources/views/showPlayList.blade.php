@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yotify - {{$list['name']}}</title>
+    <title>Yotify - {{$list->name}}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,33 +25,31 @@
         </x-dropdown-link>
         <a href="/dashboard">dashboard</a> 
     
-    <a href="/saveList?id={{$list['id']}}">save list</a> 
-    <a href="/removePlayList?id={{$list['id']}}">delete list</a>
+    <a href="/saveList">save list</a> 
+    <a href="/removePlayList">delete list</a>
     </form>
     
     
     </nav>
-    <a class="listName" href="/editPlayList?id={{$list['id']}}">{{$list['name']}}</a> 
+    <a class="listName" href="/editPlayList">{{$list->name}}</a> 
     <h2>total: {{$totalDuration}}</h2>
-    @if ($songs != null)
-        @foreach ($songs as $song)
-            <div class="songDiv">
-                <a href="/details?id={{$song->id}}" class="songName">{{$song->name}}</a>
-                @foreach ($genres as $genre)
-                    @if ($genre->id == $song->genre_id)
-                        <a href="/genre?id={{$genre->id}}" class="songGenre">
-                            {{$genre->name}}
-                        </a>
-                    @endif
-                @endforeach
-                <a class="songArtist">{{$song->artist}}</a>
-                <a href="/removePlaySong?sid={{$song->id}}&lid={{$list['id']}}" class="removeBtn">-</a>
-                <a class="songDuration">{{$song->duration}}</a>
-            </div>
+    @foreach ($songs as $song)
+     
+     <div class="songDiv">
+         <a href="/details?id={{$song->id}}" class="songName">{{$song->name}}</a>
+            @foreach ($genres as $genre)
+                @if ($genre->id == $song->genre_id)
+                    <a href="/genre?id={{$genre->id}}" class="songGenre">
+                        {{$genre->name}}
+                    </a>
+                @endif
+            @endforeach
+         <a class="songArtist">{{$song->artist}}</a>
+         <a href="/removePlaySong?sid={{$song->id}}" class="removeBtn">-</a>
+         <a class="songDuration">{{$song->duration}}</a>
+     </div>
 
-        @endforeach
-    @endif
-    
+ @endforeach
     <a href="/songs">add new song</a>
 </body>
 </html>

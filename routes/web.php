@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard',  [dashController::class, 'index'])->middleware(['auth']);
 
-Route::get('/createList', function () {return view('createList');})->middleware(['auth']);
+Route::get('/createList', [listController::class, 'createListCheck'])->middleware(['auth']);
 
 Route::post('/createList', [listController::class, 'create'])->middleware(['auth']);
 

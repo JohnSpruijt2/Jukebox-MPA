@@ -34,13 +34,9 @@
         
     </nav>
         @if ($tempPlaylists != null)
-                @foreach ($tempPlaylists as $tempPlaylist)
-                    @if ($tempPlaylist != null) 
-                        <div onclick="location.href = 'showPlayList?id={{$tempPlaylist['id']}}';" class="playlistDiv">
-                            <a>{{$tempPlaylist['name']}}</a>
-                        </div>
-                    @endif
-                @endforeach
+            <div onclick="location.href = 'showPlayList';" class="playlistDiv">
+                <a>{{$tempPlaylists->name}}</a>
+            </div>
         @endif
         @if ($playlists != null)
             <h3>saved playlists</h3>
