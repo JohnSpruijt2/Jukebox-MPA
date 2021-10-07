@@ -19,7 +19,7 @@ class listController extends Controller
             return redirect('/createList');
         }
         if (Session::get('saved_list') != null) {
-            return redirect('/createList');
+            return redirect('/dashboard');
         }
         
         $playlist = new Playlist($name);
@@ -27,6 +27,13 @@ class listController extends Controller
         Session::put('saved_list', $playlist);
 
         return redirect('/dashboard');
+    }
+
+    public function createListCheck() {
+        if (Session::get('saved_list') != null) {
+            return redirect('/dashboard');
+        }
+        return view('createList');
     }
 
     public function show(Request $request) {
