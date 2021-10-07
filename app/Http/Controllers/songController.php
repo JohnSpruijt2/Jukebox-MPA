@@ -26,7 +26,7 @@ class songController extends Controller
         }
         $lists = DB::select('select * from saved_lists where userId='.$user->id);
         $genres = DB::select('select * from `genres`');
-        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list')[0], 'genres' => $genres]);
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
     }
 
     public function genreSort(Request $request) {

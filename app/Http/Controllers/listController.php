@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Classes\Playlist;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
@@ -19,24 +19,12 @@ class listController extends Controller
             return redirect('/createList');
         }
         if (Session::get('saved_list') != null) {
-            $id = count(Session::get('saved_list')[0]);
-            $id++;
-        } else {
-            $id = 1;
+            return redirect('/createList');
         }
         
-        $newData = array('name'=>$name, 'userId'=>$user->id, 'id'=>$id);
-        if (Session::get('saved_list') == null) {
-            $data = [];
-            $middleData = [];
-        } else {
-            $data = Session::get('saved_list');
-            $middleData = $data[0];
-        }
-        
-        array_push($middleData, $newData);
-        $data = $middleData;
-        Session::put('saved_list', [$data]);
+        $playlist = new Playlist($name);
+
+        Session::put('saved_list', $playlist);
 
         return redirect('/dashboard');
     }
@@ -96,28 +84,13 @@ class listController extends Controller
 
     public function addSongToPlayList(Request $request) {
         $user = Auth::user();
-        $listId = $request->lid;
         $songId = $request->sid;
-        $list = Session::get('saved_list')[0][$listId-1];
-        if ($list['userId'] != $user->id) {
-            return redirect('/dashboard');
-        }
-        if (Session::get('saved_song') == null) {
-            $data = [];
-            $middleData = [];
-        } else {
-            $data = Session::get('saved_song')[0];
-        }
-        foreach ($data as $song) {
-            if ($song['sid'] == $songId && $song['lid'] == $listId) {
-                return redirect('/showPlayList?id='.$listId);
-            }
-        }
-        $newData = array('sid'=>$songId, 'lid'=>$listId);
-        array_push($data, $newData);
+        $list = Session::get('saved_list');
+
+        $list->addSong($songId);
         
-        Session::put('saved_song', [$data]);
-        return redirect('/showPlayList?id='.$listId);
+        Session::put('saved_song', $list);
+        return redirect('/showPlayList');
     }
 
 
@@ -125,51 +98,13 @@ class listController extends Controller
 
     public function showPlay(Request $request) {
         $user = Auth::user();
-        $list = Session::get('saved_list')[0];
-        $songsIds = Session::get('saved_song')[0];
-        $id = $request->id;
-        $listInfo = $list[$id-1];
-        $songs = null;
-        if ($user->id != $listInfo['userId']) {
-            return redirect('/dashboard');
-        }
-        if (Session::get('saved_song') != null) {
-            
-            $songs = [];
-            foreach ($songsIds as $songId) {
-                if ($songId['lid'] == $id) {
-                    $song = DB::select('SELECT * FROM songs where id='.$songId['sid']);
-                
-                    array_push($songs, $song[0]);
-                }
-                
-                
-            }
-            $totalDuration = 0;
-        foreach ($songs as $song) {             //convert seconds into minutes and seconds
-            $duration = $song->duration;
-            $tempTotalDuration = $totalDuration + $duration; //had to make a temporary int to be able to properly sum up the the two ints
-            $totalDuration = $tempTotalDuration;
-            $minutes = floor($duration/60);
-            $second = $minutes*60;
-            $seconds = $duration-$second;
-            if ($seconds <10) {
-                $seconds = '0'.$seconds;
-            }
-            $song->duration = $minutes.':'.$seconds;
-        }
-        $minutes = floor($totalDuration/60); //convert total duration seconds into minutes and seconds
-        $second = $minutes*60;
-        $seconds = $totalDuration-$second;
-        if ($seconds <10) {
-            $seconds = '0'.$seconds;
-        }
-        $totalDuration = $minutes.':'.$seconds;
-        } else {
-            $totalDuration = '0:00';
-        }
+        $list = Session::get('saved_list');
+        $songs = array();
         $genres = DB::select('select * from `genres`');
-        return view('showPlayList' , ['list' => $listInfo, 'songs' => $songs, 'genres' => $genres, 'totalDuration' => $totalDuration]);
+        foreach($list->songs as $song) {
+            
+        }
+    return view('showPlayList' , ['list' => $list, 'genres' => $genres]);
         
     }
 
@@ -262,25 +197,15 @@ class listController extends Controller
     public function editPlayList(Request $request) {
         $user = Auth::user();
         $lid = $request->id;
-        $savedList = Session::get('saved_list')[0][$lid-1];
-        if ($savedList['userId'] != $user->id) {
-                return redirect('/dashboard');
-        }
+        $savedList = Session::get('saved_list');
         return view('editPList' , ['type' => 'temp','list' => $savedList]);
     }
 
     public function confirmEditPlayList(Request $request) {
-        $user = Auth::user();
-        $lid = $request->id;
-        $name = $request->input('name');
-        $savedList = Session::get('saved_list')[0][$lid-1];
-        if ($savedList['userId'] != $user->id) {
-                return redirect('/dashboard');
-        }
-        $lists = Session::get('saved_list');
-        $lists[0][$lid-1]['name'] = $name;
-        Session::put('saved_list', $lists);
-        return redirect('/showPlayList?id='.$lid);
+        $savedList = Session::get('saved_list');
+        $name = $request->name;
+        $savedList->changeName($name);
+        return redirect('/showPlayList');
     }
 
     public function editList(Request $request) {
