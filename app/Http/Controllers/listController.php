@@ -64,8 +64,6 @@ class listController extends Controller
             $seconds = '0'.$seconds;
         }
         $totalDuration = $minutes.':'.$seconds;
-        
-
 
         $genres = DB::select('select * from `genres`');
         return view('showList', ['list' => $listInfo[0], 'songs' => $songs, 'genres' => $genres, 'totalDuration' =>$totalDuration]);
@@ -99,9 +97,6 @@ class listController extends Controller
         Session::put('saved_song', $list);
         return redirect('/showPlayList');
     }
-
-
-
 
     public function showPlay(Request $request) {
         $user = Auth::user();
