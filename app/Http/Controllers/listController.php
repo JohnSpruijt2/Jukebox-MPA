@@ -11,21 +11,43 @@ use Session;
 class listController extends Controller
 {
     //
+
+    private function calculateTime($songs) {
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $minutes = floor($duration/60);
+            $second = $minutes*60;
+            $seconds = $duration-$second;
+            if ($seconds <10) {
+                $seconds = '0'.$seconds;
+            }
+            $song->duration = $minutes.':'.$seconds;
+        }
+        return $songs;
+    }
+
+    private function calculateTotalTime($songs) {
+        $totalDuration = 0;
+        foreach ($songs as $song) {             //convert seconds into minutes and seconds
+            $duration = $song->duration;
+            $tempTotalDuration = $totalDuration + $duration; //had to make a temporary int to be able to properly sum up the the two ints
+            $totalDuration = $tempTotalDuration;
+        }
+        $minutes = floor($totalDuration/60); //convert TOTAL duration seconds into minutes and seconds
+        $second = $minutes*60;
+        $seconds = $totalDuration-$second;
+        if ($seconds <10) {
+            $seconds = '0'.$seconds;
+        }
+        $totalDuration = $minutes.':'.$seconds;
+        return $totalDuration;
+    }
+
     public function create(Request $request) {
-        
         $name = $request->input('listName');
-        $user = Auth::user();
-        if ($name == null) {
-            return redirect('/createList');
+        if ($name != null) {
+            new Playlist($name);
         }
-        if (Session::get('saved_list') != null) {
-            return redirect('/dashboard');
-        }
-        
-        $playlist = new Playlist($name);
-
-        Session::put('saved_list', $playlist);
-
         return redirect('/dashboard');
     }
 
@@ -44,26 +66,9 @@ class listController extends Controller
             return redirect('/dashboard');
         }
         $songs = DB::select('SELECT * FROM songs INNER JOIN saved_lists_songs ON songs.id=saved_lists_songs.SongId where listId='.$listId);
-        $totalDuration = 0;
-        foreach ($songs as $song) {             //convert seconds into minutes and seconds
-            $duration = $song->duration;
-            $tempTotalDuration = $totalDuration + $duration; //had to make a temporary int to be able to properly sum up the the two ints
-            $totalDuration = $tempTotalDuration;
-            $minutes = floor($duration/60);
-            $second = $minutes*60;
-            $seconds = $duration-$second;
-            if ($seconds <10) {
-                $seconds = '0'.$seconds;
-            }
-            $song->duration = $minutes.':'.$seconds;
-        }
-        $minutes = floor($totalDuration/60); //convert total duration seconds into minutes and seconds
-        $second = $minutes*60;
-        $seconds = $totalDuration-$second;
-        if ($seconds <10) {
-            $seconds = '0'.$seconds;
-        }
-        $totalDuration = $minutes.':'.$seconds;
+        $totalDuration = $this->calculateTotalTime($songs);
+        $songs = $this->calculateTime($songs);
+
 
         $genres = DB::select('select * from `genres`');
         return view('showList', ['list' => $listInfo[0], 'songs' => $songs, 'genres' => $genres, 'totalDuration' =>$totalDuration]);
@@ -88,45 +93,22 @@ class listController extends Controller
     }
 
     public function addSongToPlayList(Request $request) {
-        $user = Auth::user();
         $songId = $request->sid;
         $list = Session::get('saved_list');
-
         $list->addSong($songId);
-        
-        Session::put('saved_song', $list);
         return redirect('/showPlayList');
     }
 
     public function showPlay(Request $request) {
-        $user = Auth::user();
         $list = Session::get('saved_list');
         $songs = array();
-        $totalDuration = 0;
         $genres = DB::select('select * from `genres`');
-        foreach($list->songs as $song) {
+        foreach($list->getSongs() as $song) {
             $dbSong = DB::select('SELECT * from `songs` where id='.$song->id)[0];
             array_push($songs, $dbSong);
         }
-        foreach ($songs as $song) {             //convert seconds into minutes and seconds
-            $tempTotalDuration = $totalDuration + $song->duration; //had to make a temporary int to be able to properly sum up the the two ints
-            $totalDuration = $tempTotalDuration;
-            $duration = $song->duration;
-            $minutes = floor($duration/60);
-            $second = $minutes*60;
-            $seconds = $duration-$second;
-            if ($seconds <10) {
-                $seconds = '0'.$seconds;
-            }
-            $song->duration = $minutes.':'.$seconds;
-        }
-        $minutes = floor($totalDuration/60); //convert total duration seconds into minutes and seconds
-        $second = $minutes*60;
-        $seconds = $totalDuration-$second;
-        if ($seconds <10) {
-            $seconds = '0'.$seconds;
-        }
-        $totalDuration = $minutes.':'.$seconds;
+        $totalDuration = $this->calculateTotalTime($songs);
+        $songs = $this->calculateTime($songs);
 
     return view('showPlayList' , ['list' => $list, 'genres' => $genres, 'songs' => $songs, 'totalDuration' => $totalDuration]);
         
@@ -150,15 +132,8 @@ class listController extends Controller
     }
 
     public function removePlaySong(Request $request) {
-        $sid = $request->sid;
-        $list = Session::get('saved_list');
-        $i = 0;
-        foreach($list->songs as $song) {
-            if ($song->id == $sid) {
-                unset($list->songs[$i]);
-            }
-            $i++;
-        }
+        Session::get('saved_list')->removeSong($request->sid);
+
         return redirect('/showPlayList');
     }
 
@@ -184,16 +159,12 @@ class listController extends Controller
     }
 
     public function editPlayList(Request $request) {
-        $user = Auth::user();
-        $lid = $request->id;
         $savedList = Session::get('saved_list');
         return view('editPList' , ['type' => 'temp','list' => $savedList]);
     }
 
-    public function confirmEditPlayList() {
-        $savedList = Session::get('saved_list');
-        $name = $request->name;
-        $savedList->changeName($name);
+    public function confirmEditPlayList(Request $request) {
+        Session::get('saved_list')->changeName($request->name);
         return redirect('/showPlayList');
     }
 

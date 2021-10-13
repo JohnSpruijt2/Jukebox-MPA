@@ -46,7 +46,9 @@
                 </div>
             @endforeach
         @endif
-        <a href="createList">create new list</a>
+        @if ($tempPlaylists == null)
+            <a href="createList">create new list</a>
+        @endif
     </main>
 </body>
 </html>
