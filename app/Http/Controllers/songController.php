@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\listController;
+
 use App\Models\Song;
 use App\Models\SavedList;
 use App\Models\Genre;
@@ -17,7 +19,8 @@ class songController extends Controller
     //
     public function index() {
         $user = Auth::user();
-        $songs = Song::getSongs();
+        $songs = Song::all();
+        $songs = listController::calculateTime($songs);
         $lists = SavedList::where('userId', $user->id)->get();
         $genres = Genre::all();
         return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
@@ -26,31 +29,22 @@ class songController extends Controller
     public function genreSort(Request $request) {
         $user = Auth::user();
         $id = $request->id;
-        $songs = Song::getSongsByGenre($id);
-        $lists = DB::select('select * from saved_lists where userId='.$user->id);
-        $genres = DB::select('select * from `genres`');
+        $songs = Song::where('genre_id', $id)->get();
+        $lists = SavedList::where('userId', $user->id)->get();
+        $genres = Genre::all();
         return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
     }
 
     public function genresShow() {
-        $genres = DB::select('select * from `genres`');
+        $genres = Genre::all();
         return view('genres' , ['genres' => $genres]);
     }
 
     public function details(Request $request) {
         $id = $request->id;
-        $details = DB::select('select * from songs where id='.$id);
-        $genres = DB::select('select * from `genres`');
-        foreach ($details as $detail) {             //convert seconds into minutes and seconds
-            $duration = $detail->duration;
-            $minutes = floor($duration/60);
-            $second = $minutes*60;
-            $seconds = $duration-$second;
-            if ($seconds <10) {
-                $seconds = '0'.$seconds;
-            }
-            $detail->duration = $minutes.':'.$seconds;
-        }
+        $details = Song::where('id', $id)->get();
+        $genres = Genre::all();
+        $details = listController::calculateTime($details);
         return view('details' , ['details' => $details[0], 'genres' => $genres]);
     }
 }
