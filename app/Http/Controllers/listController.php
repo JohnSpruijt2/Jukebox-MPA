@@ -57,7 +57,7 @@ class listController extends Controller
     }
 
     public function createListCheck() {
-        if (Session::get('saved_list') != null) {
+        if (Playlist::getSavedList() != null) {
             return redirect('/dashboard');
         }
         return view('createList');
@@ -103,13 +103,13 @@ class listController extends Controller
 
     public function addSongToPlayList(Request $request) {
         $songId = $request->sid;
-        $list = Session::get('saved_list');
+        $list = Playlist::getSavedList();
         $list->addSong($songId);
         return redirect('/showPlayList');
     }
 
     public function showPlay(Request $request) {
-        $list = Session::get('saved_list');
+        $list = Playlist::getSavedList();
         $songs = array();
         $genres = Genre::all();
         foreach($list->getSongs() as $song) {
@@ -124,7 +124,7 @@ class listController extends Controller
 
     public function saveList() {
         $user = Auth::user();
-        $list = Session::get('saved_list');
+        $list = Playlist::getSavedList();
         SavedList::insert([
             'name' => $list->name,
             'userId' => $user->id,
@@ -143,12 +143,12 @@ class listController extends Controller
                 ]);                
             }
         }
-        Session::put('saved_list', null);
+        Playlist::deletePlaylist();
         return redirect('/showList?id='.$listId);
     }
 
     public function removePlaySong(Request $request) {
-        Session::get('saved_list')->removeSong($request->sid);
+        Playlist::getSavedList()->removeSong($request->sid);
 
         return redirect('/showPlayList');
     }
@@ -161,7 +161,7 @@ class listController extends Controller
     }
     
     public function removePlayList() {
-        Session::put('saved_list', null);
+        Playlist::deletePlaylist();
         
 
         return redirect('/dashboard');
@@ -175,12 +175,12 @@ class listController extends Controller
     }
 
     public function editPlayList(Request $request) {
-        $savedList = Session::get('saved_list');
+        $savedList = Playlist::getSavedList();
         return view('editPList' , ['type' => 'temp','list' => $savedList]);
     }
 
     public function confirmEditPlayList(Request $request) {
-        Session::get('saved_list')->changeName($request->name);
+        Playlist::getSavedList()->changeName($request->name);
         return redirect('/showPlayList');
     }
 

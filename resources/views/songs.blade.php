@@ -15,7 +15,6 @@
 </head>
 <body>
     <main>
-   
 
     {{ Auth::user()->name }}
     <nav>

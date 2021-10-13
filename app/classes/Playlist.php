@@ -7,6 +7,14 @@ class Playlist
     public $name;
     public $songs = array();
 
+    public static function getSavedList() {
+        return Session::get('saved_list');
+    }
+    
+    public static function deletePlayList() {
+        return Session::put('saved_list', null);
+    }
+
     public function __construct($name) {
         $this->name = $name;
         $this->updateSession();
