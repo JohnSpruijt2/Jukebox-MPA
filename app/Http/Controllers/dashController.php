@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Classes\Playlist;
 use Illuminate\Http\Request;
 use Auth;
 use DB;

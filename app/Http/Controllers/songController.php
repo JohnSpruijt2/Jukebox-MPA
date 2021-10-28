@@ -21,7 +21,12 @@ class songController extends Controller
         $user = Auth::user();
         $songs = Song::all();
         $songs = listController::calculateTime($songs);
-        $lists = SavedList::where('userId', $user->id)->first();
+        if (SavedList::where('userId', $user->id)->first() != NULL) {
+            $lists = SavedList::where('userId', $user->id)->get();
+        } else {
+            $lists = NULL;
+        }
+        
         $genres = Genre::all();
         return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
     }
