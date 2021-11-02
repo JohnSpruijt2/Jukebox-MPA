@@ -125,12 +125,7 @@ class listController extends Controller
     public function saveList() {
         $user = Auth::user();
         $list = Playlist::getSavedList();
-        SavedList::insert([
-            'name' => $list->name,
-            'userId' => $user->id,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        SavedList::insertList($list->name, $user->id); // static function used to put query in model
         $listId = SavedList::latest()->first()->id;
         
         if ($list->songs != null) {
