@@ -66,11 +66,11 @@ class listController extends Controller
     public function show(Request $request) {
         $user = Auth::user();
         $listId = $request->id;
-        $list = SavedList::where('id', $listId)->get()[0];
+        $list = SavedList::getListById($listId);
         if ($list->userId != $user->id) {
             return redirect('/dashboard');
         }
-        $songs = Song::join('saved_lists_songs', 'songs.id' , '=', 'saved_lists_songs.songId')->where('listId', $listId)->get();
+        $songs = Song::getSongsByList($listId);
         $totalDuration = $this->calculateTotalTime($songs);
         $songs = $this->calculateTime($songs);
 
@@ -82,8 +82,8 @@ class listController extends Controller
         $user = Auth::user();
         $listId = $request->lid;
         $songId = $request->sid;
-        $list = SavedList::where('id', $listId)->get();
-        $songs = Song::join('saved_lists_songs', 'songs.id' , '=', 'saved_lists_songs.songId')->where('listId', $listId)->get();
+        $list = SavedList::getListById($listId);
+        $songs = Song::getSongsByList($listId);
         if ($list[0]->userId != $user->id) {
             return redirect('/dashboard');
         }
@@ -92,12 +92,7 @@ class listController extends Controller
                 return redirect('/showList?id='.$listId);
             }
         }
-        SavedListsSong::insert([
-            'songId' => $songId,
-            'listId' => $listId,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        SavedListsSong::insertSong($songId, $listId);
         return redirect('/showList?id='.$listId);
     }
 
@@ -113,7 +108,7 @@ class listController extends Controller
         $songs = array();
         $genres = Genre::all();
         foreach($list->getSongs() as $song) {
-            $dbSong = Song::where('id', $song->id)->get()[0];
+            $dbsong = Song::getSongById($song->id);
             array_push($songs, $dbSong);
         }
         $totalDuration = $this->calculateTotalTime($songs);
@@ -125,17 +120,12 @@ class listController extends Controller
     public function saveList() {
         $user = Auth::user();
         $list = Playlist::getSavedList();
-        SavedList::insertList($list->name, $user->id); // static function used to put query in model
+        SavedList::insertList($list->name, $user->id);
         $listId = SavedList::latest()->first()->id;
         
         if ($list->songs != null) {
             foreach ($list->songs as $song) {
-                SavedListsSong::insert([
-                    'songId' => $song->id,
-                    'listId' => $listId,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);                
+                SavedListsSong::insertSong($song->id, $listId);            
             }
         }
         Playlist::deletePlaylist();
@@ -157,15 +147,13 @@ class listController extends Controller
     
     public function removePlayList() {
         Playlist::deletePlaylist();
-        
-
         return redirect('/dashboard');
     }
 
     public function removeList(Request $request) {
         $lid = $request->id;
-        SavedList::where('id', $lid)->delete();
-        SavedListsSong::where('listId', $lid)->delete();
+        SavedList::removeList($lid);
+        SavedListsSong::removeListsSong($lid);
         return redirect('/dashboard');
     }
 
@@ -182,7 +170,7 @@ class listController extends Controller
     public function editList(Request $request) {
         $user = Auth::user();
         $lid = $request->id;
-        $list = SavedList::where('id', $lid)->get()[0];
+        $list = SavedList::getListById($listId);
         if ($list->userId != $user->id) {
                 return redirect('/dashboard');
         }
@@ -193,14 +181,11 @@ class listController extends Controller
         $user = Auth::user();
         $lid = $request->id;
         $name = $request->input('name');
-        $list = SavedList::where('id', $lid)->get()[0];
+        $list = SavedList::getListById($listId);
         if ($list->userId != $user->id || $name == '') {
                 return redirect('/dashboard');
         }
-        SavedList::where('id',$lid)->update([
-            'name' => $name,
-            'updated_at' => now()
-        ]);
+        SavedList::updateListName($lid, $name);
         return redirect('/dashboard');
     }
 }

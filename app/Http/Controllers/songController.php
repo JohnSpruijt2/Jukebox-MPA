@@ -22,22 +22,22 @@ class songController extends Controller
         $songs = Song::all();
         $songs = listController::calculateTime($songs);
         if (SavedList::where('userId', $user->id)->first() != NULL) {
-            $lists = SavedList::where('userId', $user->id)->get();
+            $lists = SavedList::getListsByUser('userId', $user->id);
         } else {
             $lists = NULL;
         }
         
         $genres = Genre::all();
-        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Playlist::getSavedList(), 'genres' => $genres]);
     }
 
     public function genreSort(Request $request) {
         $user = Auth::user();
         $id = $request->id;
-        $songs = Song::where('genre_id', $id)->get();
-        $lists = SavedList::where('userId', $user->id)->get();
+        $songs = Song::getSongsByGenre($id);
+        $lists = SavedList::getListsByUser('userId', $user->id);
         $genres = Genre::all();
-        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Session::get('saved_list'), 'genres' => $genres]);
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Playlist::getSavedList(), 'genres' => $genres]);
     }
 
     public function genresShow() {
@@ -47,7 +47,7 @@ class songController extends Controller
 
     public function details(Request $request) {
         $id = $request->id;
-        $details = Song::where('id', $id)->get();
+        $details = Song::getSongById($id);
         $genres = Genre::all();
         $details = listController::calculateTime($details);
         return view('details' , ['details' => $details[0], 'genres' => $genres]);

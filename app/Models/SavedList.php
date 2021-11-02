@@ -16,4 +16,19 @@ class SavedList extends Model
             'updated_at' => now()
         ]);
     }
+    public static function getListById($id) {
+        return SavedList::where('id', $id)->get()[0];
+    }
+    public static function getListsByUser($user) {
+        return SavedList::where('userId', $user)->get();
+    }
+    public static function removeList($id) {
+        SavedList::where('id', $id)->delete();
+    }
+    public static function updateListName($id, $name) {
+        SavedList::where('id',$id)->update([
+            'name' => $name,
+            'updated_at' => now()
+        ]);
+    }
 }
