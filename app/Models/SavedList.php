@@ -17,10 +17,13 @@ class SavedList extends Model
         ]);
     }
     public static function getListById($id) {
-        return SavedList::where('id', $id)->get()[0];
+        return SavedList::where('id', $id)->get();
     }
     public static function getListsByUser($user) {
         return SavedList::where('userId', $user)->get();
+    }
+    public static function getListByUser($user) {
+        return SavedList::where('userId', $user)->first();
     }
     public static function removeList($id) {
         SavedList::where('id', $id)->delete();

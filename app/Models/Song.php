@@ -14,15 +14,15 @@ class Song extends Model
         return $this->belongsTo(Genre::class); //remnant from when i tried linking them together, didnt work but i will let it stay to show i tried
     }
 
-    public static function getSongsByList () {
-        return Song::join('saved_lists_songs', 'songs.id' , '=', 'saved_lists_songs.songId')->where('listId', $listId)->get();
+    public static function getSongsByList ($id) {
+        return Song::join('saved_lists_songs', 'songs.id' , '=', 'saved_lists_songs.songId')->where('listId', $id)->get();
     }
 
     public static function getSongById($id) {
         return Song::where('id', $id)->get()[0];
     }
     
-    public static function getSongByGenre($genre) {
+    public static function getSongsByGenre($genre) {
         return Song::where('genre_id', $genre)->get();
     }
 }

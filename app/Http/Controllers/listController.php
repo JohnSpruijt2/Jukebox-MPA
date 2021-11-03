@@ -66,7 +66,7 @@ class listController extends Controller
     public function show(Request $request) {
         $user = Auth::user();
         $listId = $request->id;
-        $list = SavedList::getListById($listId);
+        $list = SavedList::getListById($listId)[0];
         if ($list->userId != $user->id) {
             return redirect('/dashboard');
         }
@@ -108,7 +108,7 @@ class listController extends Controller
         $songs = array();
         $genres = Genre::all();
         foreach($list->getSongs() as $song) {
-            $dbsong = Song::getSongById($song->id);
+            $dbSong = Song::getSongById($song->id);
             array_push($songs, $dbSong);
         }
         $totalDuration = $this->calculateTotalTime($songs);
