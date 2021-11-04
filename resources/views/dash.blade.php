@@ -35,7 +35,7 @@
     </nav>
         @if ($tempPlaylists != null)
             <div onclick="location.href = 'showPlayList';" class="playlistDiv">
-                <a>{{$tempPlaylists->name}}</a>
+                <a>{{$tempPlaylists[0]}}</a>
             </div>
         @endif
         @if ($playlists != null)

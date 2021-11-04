@@ -22,13 +22,14 @@ class songController extends Controller
         $user = Auth::user();
         $songs = Song::all();
         $songs = listController::calculateTime($songs);
+        $tempList = new Playlist;
         if (SavedList::getListByUser($user->id)['id'] != NULL) {
             $lists = SavedList::getListsByUser($user->id);
         } else {
             $lists = NULL;
         }
         $genres = Genre::all();
-        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => Playlist::getSavedList(), 'genres' => $genres]);
+        return view('songs', ['songs' => $songs, 'lists' => $lists, 'playLists' => $tempList->getAll(), 'genres' => $genres]);
     }
 
     public function genreSort(Request $request) {

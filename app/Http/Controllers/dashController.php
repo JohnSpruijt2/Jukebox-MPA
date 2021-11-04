@@ -22,7 +22,8 @@ class dashController extends Controller
         } else {
             $playlists = null;
         }
-        $tempPlay = Playlist::getSavedList();
+        $tempPlay = new Playlist;
+        $tempPlay = $tempPlay->getAll();
         return view('dash', ['playlists' => $playlists, 'tempPlaylists' => $tempPlay]);
     }
 }

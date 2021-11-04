@@ -51,7 +51,7 @@
                     @if ($playLists != null)
                         <div class="dropdown-item">
                             <a href='/addPlayList?sid={{$song->id}}'>
-                            {{$playLists->name}}
+                            {{$playLists[0]}}
                             </a>
                         </div>
                     @endif

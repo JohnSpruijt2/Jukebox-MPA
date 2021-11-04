@@ -4,29 +4,39 @@ use Session;
 use Auth;
 class Playlist 
 {
-    public $name;
-    public $songs = array();
+    private $name;
+    private $songs = array();
 
-    public static function getSavedList() {
-        return Session::get('saved_list');
+    private function updateSession() {
+        Session::put('saved_list', [$this->name, $this->songs]);
     }
     
-    public static function deletePlayList() {
-        return Session::put('saved_list', null);
+    public function deletePlayList() {
+        Session::put('saved_list', null);
     }
 
-    public function __construct($name) {
-        $this->name = $name;
-        $this->updateSession();
+    public function __construct() {
+        if (Session::get('saved_list') != null) {
+            $this->name = Session::get('saved_list')[0];
+            $this->songs = Session::get('saved_list')[1];
+        } else {
+            $this->name = 'Playlist';
+            Session::put('saved_list', [$this->name, $this->songs]);
+        }
+        
     }
 
 
     public function changeName($name) {
         $this->name = $name;
+        $this->updateSession();
+    }
+    public function getName() {
+        return $this->name;
     }
     
     public function getAll() {
-        return $this;
+        return [$this->name, $this->songs];
     }
 
     public function getSongs() {
@@ -34,24 +44,22 @@ class Playlist
     }
 
     public function addSong($id) {
-        $newSong = new Song($id);
-        array_push($this->songs, $newSong);
+        array_push($this->songs, $id);
         $this->updateSession();
     }
 
     public function removeSong($id) {
         for ($i = 0; $i < count($this->songs); $i++) {
             if ($this->songs[$i] != null) {
-                if ($this->songs[$i]->id == $id) {
+                if ($this->songs[$i] == $id) {
                     unset($this->songs[$i]);
                 }
             }
             
         }
         $this->songs = array_values($this->songs);
+        $this->updateSession();
     }
 
-    private function updateSession() {
-        Session::put('saved_list', $this);
-    }
+    
 }

@@ -98,42 +98,51 @@ class listController extends Controller
 
     public function addSongToPlayList(Request $request) {
         $songId = $request->sid;
-        $list = Playlist::getSavedList();
+        $list = new Playlist;
         $list->addSong($songId);
         return redirect('/showPlayList');
     }
 
     public function showPlay(Request $request) {
-        $list = Playlist::getSavedList();
+        $list = new Playlist;
+        $listAll = $list->getAll();
         $songs = array();
         $genres = Genre::all();
-        foreach($list->getSongs() as $song) {
-            $dbSong = Song::getSongById($song->id);
-            array_push($songs, $dbSong);
+        if ($list->getSongs() != null) {
+            foreach($list->getSongs() as $song) {
+                $dbSong = Song::getSongById($song);
+                array_push($songs, $dbSong);
+            }
+            $totalDuration = $this->calculateTotalTime($songs);
+            $songs = $this->calculateTime($songs);
+        } else {
+            $songs = null;
+            $totalDuration = '0:00';
         }
-        $totalDuration = $this->calculateTotalTime($songs);
-        $songs = $this->calculateTime($songs);
-
-        return view('showPlayList' , ['list' => $list, 'genres' => $genres, 'songs' => $songs, 'totalDuration' => $totalDuration]);
+        
+        
+        return view('showPlayList' , ['list' => $listAll, 'genres' => $genres, 'songs' => $songs, 'totalDuration' => $totalDuration]);
     }
 
     public function saveList() {
         $user = Auth::user();
-        $list = Playlist::getSavedList();
-        SavedList::insertList($list->name, $user->id);
+        $list = new Playlist;
+        $listData = $list->getAll();
+        SavedList::insertList($listData[0], $user->id);
         $listId = SavedList::latest()->first()->id;
         
-        if ($list->songs != null) {
-            foreach ($list->songs as $song) {
-                SavedListsSong::insertSong($song->id, $listId);            
+        if ($list->getSongs() != null) {
+            foreach ($list->getSongs() as $song) {
+                SavedListsSong::insertSong($song, $listId);            
             }
         }
-        Playlist::deletePlaylist();
+        $list->deletePlaylist();
         return redirect('/showList?id='.$listId);
     }
 
     public function removePlaySong(Request $request) {
-        Playlist::getSavedList()->removeSong($request->sid);
+        $list = new Playlist;
+        $list->removeSong($request->sid);
 
         return redirect('/showPlayList');
     }
@@ -146,7 +155,8 @@ class listController extends Controller
     }
     
     public function removePlayList() {
-        Playlist::deletePlaylist();
+        $list = new Playlist;
+        $list->deletePlaylist();
         return redirect('/dashboard');
     }
 
@@ -158,19 +168,21 @@ class listController extends Controller
     }
 
     public function editPlayList(Request $request) {
-        $savedList = Playlist::getSavedList();
-        return view('editPList' , ['type' => 'temp','list' => $savedList]);
+        $list = new Playlist;
+        $listData = $list->getAll();
+        return view('editPList' , ['type' => 'temp','list' => $listData]);
     }
 
     public function confirmEditPlayList(Request $request) {
-        Playlist::getSavedList()->changeName($request->name);
+        $list = new Playlist;
+        $list->changeName($request->name);
         return redirect('/showPlayList');
     }
 
     public function editList(Request $request) {
         $user = Auth::user();
         $lid = $request->id;
-        $list = SavedList::getListById($listId);
+        $list = SavedList::getListById($lid)[0];
         if ($list->userId != $user->id) {
                 return redirect('/dashboard');
         }
@@ -181,7 +193,7 @@ class listController extends Controller
         $user = Auth::user();
         $lid = $request->id;
         $name = $request->input('name');
-        $list = SavedList::getListById($listId);
+        $list = SavedList::getListById($lid)[0];
         if ($list->userId != $user->id || $name == '') {
                 return redirect('/dashboard');
         }
