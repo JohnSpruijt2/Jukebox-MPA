@@ -20,7 +20,8 @@ class Playlist
             $this->name = Session::get('saved_list')[0];
             $this->songs = Session::get('saved_list')[1];
         } else {
-            $this->name = 'Playlist';
+            $user = Auth::user();
+            $this->name = $user->name."'s Playlist";
             Session::put('saved_list', [$this->name, $this->songs]);
         }
         

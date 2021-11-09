@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SavedList extends Model
 {
     use HasFactory;
+    protected $fillable = array('name', 'userId', 'created_at', 'updated_at');
     public static function insertList($name, $id) {
         SavedList::insert([
             'name' => $name,

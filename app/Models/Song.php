@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Song extends Model
 {
     use HasFactory;
-
+    protected $fillable = array('name', 'artist', 'duration', 'created_at', 'updated_at');
     public function genre() {
         return $this->belongsTo(Genre::class); //remnant from when i tried linking them together, didnt work but i will let it stay to show i tried
     }

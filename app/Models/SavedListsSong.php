@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SavedListsSong extends Model
 {
     use HasFactory;
+    protected $fillable = array('name', 'userId', 'listId', 'created_at', 'updated_at');
     public static function insertSong($sid, $lid) {
         SavedListsSong::insert([
             'songId' => $sid,
